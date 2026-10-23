@@ -26,11 +26,14 @@ class EvalStep {
   const EvalStep(this.task, this.item, this.index);
 
   /// Rough relative cost, for time estimates: a fixed share for reading the
-  /// prompt plus the output cap. A multiple-choice item is mostly prompt; a
-  /// writing item is mostly output.
+  /// prompt plus the output cap, in output-token equivalents.
+  ///
+  /// Fitted to LFM2.5-350M on a mid-range phone, where a multiple-choice
+  /// item (one output token) took 2.3 s and a 96-token writing item 5.5 s:
+  /// reading a short Tamil prompt costs about as much as writing 64 tokens.
   int get cost => _promptCost + task.maxTokens;
 
-  static const _promptCost = 24;
+  static const _promptCost = 64;
 }
 
 /// Something that happened during a run.
@@ -186,11 +189,13 @@ class EvalRunner {
 
     out = StreamController<EvalEvent>(
       onListen: drive,
-      onCancel: () async {
+      // Not awaited: a generator stops its work when its stream is
+      // cancelled, synchronously, so there is nothing left worth waiting for.
+      onCancel: () {
         cancelled = true;
         final p = pending;
         if (p != null && !p.isCompleted) p.complete(null);
-        await current?.cancel();
+        unawaited(current?.cancel());
       },
     );
     return out.stream;

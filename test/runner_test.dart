@@ -77,7 +77,7 @@ void main() {
       now: () => DateTime.utc(2026, 10, 24, 0, 0, t++),
     );
     expect(runner.steps.map((s) => s.item.id), ['m1', 'm2', 'q1']);
-    expect(runner.totalCost, (24 + 1) * 2 + 24 + 8);
+    expect(runner.totalCost, (64 + 1) * 2 + 64 + 8);
 
     final events = await runner.run(modelId: 'fake').toList();
     expect(events.whereType<ItemStarted>(), hasLength(3));
