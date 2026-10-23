@@ -1,0 +1,18 @@
+name: thinai_tamil_evals
+description: >-
+  A small Tamil test set and scorer for language models, sized to run on a
+  phone. Measures how well a model understands and writes Tamil.
+version: 0.1.0
+repository: https://github.com/Abhinivesh2729/thinai-tamil-evals
+issue_tracker: https://github.com/Abhinivesh2729/thinai-tamil-evals/issues
+topics: [tamil, llm, evaluation, benchmark, nlp]
+
+environment:
+  sdk: ^3.11.0
+
+dev_dependencies:
+  lints: ^6.0.0
+  test: ^1.25.0
+
+executables:
+  thinai_tamil_evals:
